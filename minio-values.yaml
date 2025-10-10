@@ -1,0 +1,34 @@
+mode: distributed
+replicas: 3
+pools: 1
+
+persistence:
+  enabled: true
+  storageClass: "local-storage"
+  size: 1Gi
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - minio
+        topologyKey: kubernetes.io/hostname
+
+rootUser: "rootuser"
+rootPassword: "rootpass12"
+
+service:
+  type: NodePort
+  port: "9000"
+  nodePort: 31000
+
+consoleService:
+  type: NodePort
+  port: "9001"
+  nodePort: 31001
